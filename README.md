@@ -44,6 +44,8 @@ See [`examples/standard-numpad.json`](examples/standard-numpad.json) for a full 
 ### Device
 Identifies the *model* of hardware the layout is for, so a tool can pick the right layout for a device it finds.
 
+You can find a device's ids with `lsusb`: in a line like `Bus 001 Device 016: ID 8089:0008 SayoDevice SayoDevice 6x4F`, the `8089:0008` is `vendor:product`.
+
 | field     | required | |
 |-----------|----------|-|
 | `vendor`  | yes      | USB or Bluetooth vendor id: 4 lowercase hex digits, as `lsusb` prints it, e.g. `"8089"`. |
@@ -118,7 +120,7 @@ Prints the key at a column and row of a device's layout, **counted from 1** at t
 
 (Positions in the layout file are different: they are in key units counted from 0, and may be fractions. `keygeom key` takes whole column and row numbers and does the conversion.)
 
-The device is a `VENDOR:PRODUCT` id, part of a layout's name (`keygeom key sayodevice 1 6`) or a layout file. Ids and names are looked up in [`layouts/`](layouts/), or in the folder given with `--layouts`. If the layout has more than one block, choose one with `--block`.
+The device is a `VENDOR:PRODUCT` id (run `lsusb` and look for the `ID` on your device's line, e.g. `ID 8089:0008`), part of a layout's name (`keygeom key sayodevice 1 6`) or a layout file. Ids and names are looked up in [`layouts/`](layouts/), or in the folder given with `--layouts`. If the layout has more than one block, choose one with `--block`.
 
 This lets a script refer to a key by where it is rather than by what it sends, for example to bind the top-right key of a pad with [linux-event-triggers](https://github.com/talwrii/linux-event-triggers): `evtrig --serial $SERIAL --bind "$(keygeom key 8089:0008 4 1)=tmux next-window"`.
 

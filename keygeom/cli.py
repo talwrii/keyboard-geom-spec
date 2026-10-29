@@ -25,7 +25,7 @@ def main(argv=None):
     p.add_argument("files", nargs="+", metavar="FILE")
 
     p = sub.add_parser("key", help="print the key at a coordinate of a device's layout")
-    p.add_argument("device", help="VENDOR:PRODUCT (e.g. 8089:0008), part of a layout's name, or a layout file")
+    p.add_argument("device", help="VENDOR:PRODUCT id as shown by lsusb (e.g. 8089:0008), part of a layout's name, or a layout file")
     p.add_argument("column", type=_position, help="column, counting from 1 at the left")
     p.add_argument("row", type=_position, help="row, counting from 1 at the top")
     p.add_argument("--block", help="block name (needed if the layout has more than one)")
