@@ -1,0 +1,26 @@
+{
+  "name": "Standard numpad",
+  "blocks": {
+    "numpad": {
+      "keys": {
+        "KEY_NUMLOCK": {"x": 0, "y": 0},
+        "KEY_KPSLASH": {"x": 1, "y": 0},
+        "KEY_KPASTERISK": {"x": 2, "y": 0},
+        "KEY_KPMINUS": {"x": 3, "y": 0},
+        "KEY_KP7": {"x": 0, "y": 1},
+        "KEY_KP8": {"x": 1, "y": 1},
+        "KEY_KP9": {"x": 2, "y": 1},
+        "KEY_KPPLUS": {"x": 3, "y": 1, "h": 2},
+        "KEY_KP4": {"x": 0, "y": 2},
+        "KEY_KP5": {"x": 1, "y": 2},
+        "KEY_KP6": {"x": 2, "y": 2},
+        "KEY_KP1": {"x": 0, "y": 3},
+        "KEY_KP2": {"x": 1, "y": 3},
+        "KEY_KP3": {"x": 2, "y": 3},
+        "KEY_KPENTER": {"x": 3, "y": 3, "h": 2},
+        "KEY_KP0": {"x": 0, "y": 4, "w": 2},
+        "KEY_KPDOT": {"x": 2, "y": 4}
+      }
+    }
+  }
+}
