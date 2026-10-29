@@ -2,7 +2,19 @@ import argparse
 import json
 import sys
 
+from .lookup import DEFAULT_LAYOUTS, find_layout, key_at
 from .spec import validate
+
+
+def _position(text):
+    """A column or row number, counted from 1 as people count."""
+    try:
+        n = int(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{text!r} is not a whole number") from None
+    if n < 1:
+        raise argparse.ArgumentTypeError("columns and rows are counted from 1")
+    return n
 
 
 def main(argv=None):
@@ -11,6 +23,13 @@ def main(argv=None):
 
     p = sub.add_parser("validate", help="check keygeom files against the spec")
     p.add_argument("files", nargs="+", metavar="FILE")
+
+    p = sub.add_parser("key", help="print the key at a coordinate of a device's layout")
+    p.add_argument("device", help="VENDOR:PRODUCT (e.g. 8089:0008), part of a layout's name, or a layout file")
+    p.add_argument("column", type=_position, help="column, counting from 1 at the left")
+    p.add_argument("row", type=_position, help="row, counting from 1 at the top")
+    p.add_argument("--block", help="block name (needed if the layout has more than one)")
+    p.add_argument("--layouts", help="folder of layouts to search (default: the layouts/ folder of this checkout)")
 
     p = sub.add_parser("record", help="create a keygeom file by pressing the keys of a device in order")
     p.add_argument("device", help="evdev device, e.g. /dev/input/event21")
@@ -33,6 +52,19 @@ def main(argv=None):
                 print(f"{path}: {e}", file=sys.stderr)
             bad = bad or bool(errors)
         return 1 if bad else 0
+
+    if args.command == "key":
+        try:
+            path, layout = find_layout(args.device, args.layouts or DEFAULT_LAYOUTS)
+            key = key_at(layout, args.column - 1, args.row - 1, args.block)
+        except (OSError, ValueError) as e:
+            print(f"keygeom: {e}", file=sys.stderr)
+            return 1
+        if key is None:
+            print(f"keygeom: no key at column {args.column}, row {args.row} in {path.name}", file=sys.stderr)
+            return 1
+        print(key)
+        return 0
 
     from .record import record
     try:

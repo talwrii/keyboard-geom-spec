@@ -109,6 +109,21 @@ from keygeom import validate
 errors = validate(json.load(open("layout.json")))   # [] if valid
 ```
 
+## Looking up a key
+```
+keygeom key 8089:0008 4 1
+KEY_4
+```
+Prints the key at a column and row of a device's layout, **counted from 1** at the top left: `4 1` is the fourth column of the first row. A wide or tall key answers for every column or row it covers. If there is no key there, nothing is printed and the exit status is 1.
+
+(Positions in the layout file are different: they are in key units counted from 0, and may be fractions. `keygeom key` takes whole column and row numbers and does the conversion.)
+
+The device is a `VENDOR:PRODUCT` id, part of a layout's name (`keygeom key sayodevice 1 6`) or a layout file. Ids and names are looked up in [`layouts/`](layouts/), or in the folder given with `--layouts`. If the layout has more than one block, choose one with `--block`.
+
+This lets a script refer to a key by where it is rather than by what it sends, for example to bind the top-right key of a pad with [linux-event-triggers](https://github.com/talwrii/linux-event-triggers): `evtrig --serial $SERIAL --bind "$(keygeom key 8089:0008 4 1)=tmux next-window"`.
+
+From Python, `find_layout` and `key_at` are in `keygeom`. They use the file's positions, counted from 0, not the 1-based numbers of the command.
+
 ## Recording
 ```
 keygeom record /dev/input/event21 --name "My pad" -o layout.json
